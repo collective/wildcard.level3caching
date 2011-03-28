@@ -1,0 +1,4 @@
+<layers>
+    <layer name="wildcard.level3caching" 
+           interface="wildcard.level3caching.interfaces.ILayer" />
+</layers>

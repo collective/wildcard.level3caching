@@ -1,0 +1,79 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:five="http://namespaces.zope.org/five"
+  xmlns:i18n="http://namespaces.zope.org/i18n"
+  xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+  xmlns:browser="http://namespaces.zope.org/browser"
+  i18n_domain="wildcard.level3caching">
+
+  <genericsetup:registerProfile
+    name="default"
+    title="Level(3) Integration"
+    directory="profiles/default"
+    description="A product to integrate with level3"
+    provides="Products.GenericSetup.interfaces.EXTENSION"
+  />
+
+  <browser:page
+    name="level3-settings"
+    for="Products.CMFPlone.Portal.PloneSite"
+    class=".views.Level3SettingsForm"
+    layer=".interfaces.ILayer"
+    permission="cmf.ManagePortal"
+  />
+  <adapter 
+    for="Products.CMFPlone.Portal.PloneSite"
+    provides=".interfaces.ILevel3CachingSettings"
+    factory=".settings.Settings"
+  />
+  
+  <view type="zope.publisher.interfaces.browser.IBrowserRequest"
+		provides="zope.app.form.interfaces.IInputWidget"
+		for="zope.schema.interfaces.IDict"
+		factory=".widgets.DictionaryWidgetFactory"
+		permission="zope.Public" 
+	/>
+  
+  <view type="zope.publisher.interfaces.browser.IBrowserRequest"
+		provides="zope.app.form.interfaces.IInputWidget"
+		for="zope.schema.interfaces.IDict zope.schema.interfaces.IField zope.schema.interfaces.IField"
+		factory=".widgets.SimpleDictionaryWidget"
+		permission="zope.Public" 
+	/>
+
+  <subscriber
+    for="Products.Archetypes.BaseObject.BaseObject
+         Products.CMFCore.interfaces.IActionSucceededEvent"
+    handler=".events.on_change"
+  />
+  <subscriber 
+    for="Products.Archetypes.BaseObject.BaseObject
+         zope.app.container.interfaces.IObjectAddedEvent"
+    handler=".events.on_change" 
+  />
+  <subscriber 
+    for="Products.Archetypes.BaseObject.BaseObject
+         zope.app.container.interfaces.IObjectRemovedEvent"
+    handler=".events.on_change" 
+  />
+  <subscriber 
+    for="Products.Archetypes.BaseObject.BaseObject
+         zope.app.container.interfaces.IObjectModifiedEvent"
+    handler=".events.on_change"
+  />
+
+  <browser:page
+    name="invalidate-level-3"
+    for="*"
+    permission="cmf.ModifyPortalContent"
+    class=".views.Utils"
+    attribute="invalidate"
+    layer=".interfaces.ILayer"
+  />
+  
+  <browser:resource
+    name="level3-icon.jpg"
+    file="level3.jpg"
+  />
+    
+</configure>
