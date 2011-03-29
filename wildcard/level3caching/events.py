@@ -28,6 +28,11 @@ def on_change(object, event, forced=False):
     site_path = '/'.join(site.getPhysicalPath())
     views = settings.invalidated_views
     base = '/'.join(object.getPhysicalPath())[len(site_path):]
+    if not forced:
+        for path in settings.skipped_paths:
+            if base.startswith(path):
+                logger.info("skipping invalidation for %s" % base)
+                return
     urls = [base]
     base = base + '/'
     urls.append(base)

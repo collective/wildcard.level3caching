@@ -12,6 +12,14 @@ class ILevel3CachingSettings(Interface):
     secret = schema.TextLine(title=u'Secret')
     access_group = schema.TextLine(title=u'Access Group')
     property_name = schema.TextLine(title=u'Property Name')
+
+    skipped_paths = schema.List(
+        title=u"Skipped Paths",
+        description=u"Specify Paths that are excluded from automatic invalidation. These should be absolute paths with the root being the Plone site.",
+        default=[],
+        missing_value=[],
+        value_type=schema.TextLine(title=u"path"),
+    )
     
     invalidated_views = schema.Dict(
         title=u"Views to Invalidate",
