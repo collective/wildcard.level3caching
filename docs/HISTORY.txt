@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.1a2 (2011-03-30)
+----------------
+
+- do not invalidate when object is removed--gets messy
+
 1.1a1 (2011-03-29)
 ----------------
 

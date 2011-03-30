@@ -53,11 +53,6 @@
   />
   <subscriber 
     for="Products.Archetypes.BaseObject.BaseObject
-         zope.app.container.interfaces.IObjectRemovedEvent"
-    handler=".events.on_change" 
-  />
-  <subscriber 
-    for="Products.Archetypes.BaseObject.BaseObject
          zope.app.container.interfaces.IObjectModifiedEvent"
     handler=".events.on_change"
   />
