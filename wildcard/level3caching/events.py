@@ -41,7 +41,8 @@ def on_change(object, event, forced=False):
     parent = aq_parent(object)
     if getattr(parent, 'default_page', None) == object.getId():
         base = '/'.join(parent.getPhysicalPath())[len(site_path):]
-        urls.append(base)
+        if base:
+            urls.append(base)
         base = base + '/'
         urls.append(base)
         urls.extend(invalidated_urls(parent, base, views))
