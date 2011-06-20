@@ -159,10 +159,11 @@ class Level3Service(object):
         try:
             result = urllib2.urlopen(req)
         except urllib2.HTTPError, ex:
-            if ex.getcode() == 403:
+            if hasattr(ex, 'getcode') and ex.getcode() == 403:
                 raise ForbiddenException("something went wrong authorizing this request. %s" % str(ex.readlines()))
             else:
                 raise Exception("There was an erorr %s" % str(ex.readlines()))
+            
         data = result.read()
         if self.wrap:
             data = XMLWrapper(data)

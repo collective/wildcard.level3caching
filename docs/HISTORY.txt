@@ -6,6 +6,8 @@ Changelog
 
 - fixed issue in invalidating root
 
+- fixed error handling
+
 
 1.1a2 (2011-03-30)
 ----------------
