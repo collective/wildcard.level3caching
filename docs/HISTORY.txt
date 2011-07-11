@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1a3 (unreleased)
+1.1a3 (2011-07-11)
 ------------------
 
 - fixed issue in invalidating root
