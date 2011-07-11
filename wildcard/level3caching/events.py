@@ -64,7 +64,7 @@ def on_change(object, event, forced=False):
             """ % (property_name, '\n'.join(['<path>%s</path>' % url for url in urls]))
             )
             logging.info("Invalidating cache for urls %s" % ', '.join(urls))
-        except:
+        except Exception, ex:
             logging.warn('There was an error trying to invalidate level(3) cache.')
                     
     
@@ -73,3 +73,16 @@ def on_change(object, event, forced=False):
             
 
 
+from interfaces import ILevel3CachePurgeForcedEvent
+import zope.component.interfaces
+from zope.interface import implements
+
+class Level3CachePurgeForcedEvent(zope.component.interfaces.ObjectEvent):
+    """An object has been modified"""
+    implements(ILevel3CachePurgeForcedEvent)
+
+    def __init__(self, context, request):
+        super(Level3CachePurgeForcedEvent, self).__init__(context)
+        self.context = context
+        self.request = request
+        

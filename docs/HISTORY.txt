@@ -8,6 +8,8 @@ Changelog
 
 - fixed error handling
 
+- use event when manually purged
+
 
 1.1a2 (2011-03-30)
 ----------------

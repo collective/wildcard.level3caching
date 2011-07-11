@@ -34,3 +34,8 @@ class ILevel3CachingSettings(Interface):
             'News Item' : ''
         }
     )
+
+
+class ILevel3CachePurgeForcedEvent(Interface):
+    """
+    """
