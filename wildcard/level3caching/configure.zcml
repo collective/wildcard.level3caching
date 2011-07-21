@@ -48,12 +48,12 @@
   />
   <subscriber 
     for="Products.Archetypes.BaseObject.BaseObject
-         zope.app.container.interfaces.IObjectAddedEvent"
+         zope.lifecycleevent.interfaces.IObjectAddedEvent"
     handler=".events.on_change" 
   />
   <subscriber 
     for="Products.Archetypes.BaseObject.BaseObject
-         zope.app.container.interfaces.IObjectModifiedEvent"
+         zope.lifecycleevent.interfaces.IObjectModifiedEvent"
     handler=".events.on_change"
   />
 
