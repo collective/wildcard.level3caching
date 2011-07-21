@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1a4 (unreleased)
+1.1a4 (2011-07-21)
 ------------------
 
 - plone 4 fixes
