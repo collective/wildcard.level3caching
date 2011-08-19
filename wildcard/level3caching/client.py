@@ -133,7 +133,7 @@ class Level3Service(object):
             self.method
         )
         
-        hash = hmac.new(self.secret, authstring, sha1).digest()
+        hash = hmac.new(self.secret.encode('ascii'), authstring.encode('ascii'), sha1).digest()
         return "MPA %s:%s" % (self.key_id, base64.b64encode(hash))
         
     def __call__(self, method, options={}, post_data=None):
