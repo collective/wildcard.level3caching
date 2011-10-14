@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2a1 (unreleased)
+1.2a1 (2011-10-14)
 ------------------
 
 - add ability to do custom invalidator methods
