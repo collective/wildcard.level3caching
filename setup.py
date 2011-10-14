@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.1a5'
+version = '1.2a1'
 
 setup(name='wildcard.level3caching',
       version=version,

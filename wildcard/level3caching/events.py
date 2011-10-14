@@ -1,5 +1,6 @@
 from wildcard.level3caching.client import Level3Service
 from wildcard.level3caching.settings import Settings
+from wildcard.level3caching import runCustomInvalidators
 from zope.app.component.hooks import getSite
 from Acquisition import aq_parent, aq_inner
 from threading import Timer
@@ -17,13 +18,15 @@ def invalidated_urls(object, base, views):
             urls.append(base + view)
     return urls
 
+
 def on_change(object, event, forced=False):
     site = getSite()
     settings = Settings(site)
-    if not forced and (not settings.auto or not settings.key_id or not settings.secret or \
-      not settings.access_group or not settings.property_name):
+    if not forced and (not settings.auto or not settings.key_id or \
+            not settings.secret or not settings.access_group or \
+                                            not settings.property_name):
         return
-    
+
     object = aq_inner(object)
     site_path = '/'.join(site.getPhysicalPath())
     views = settings.invalidated_views
@@ -37,7 +40,7 @@ def on_change(object, event, forced=False):
     base = base + '/'
     urls.append(base)
     urls.extend(invalidated_urls(object, base, views))
-    
+
     parent = aq_parent(object)
     if getattr(parent, 'default_page', None) == object.getId():
         base = '/'.join(parent.getPhysicalPath())[len(site_path):]
@@ -46,12 +49,15 @@ def on_change(object, event, forced=False):
         base = base + '/'
         urls.append(base)
         urls.extend(invalidated_urls(parent, base, views))
+    urls.extend(runCustomInvalidators(object, parent, site_path))
 
     key_id, secret = settings.key_id, settings.secret
     access_group, property_name = settings.access_group, settings.property_name
+
     def do_later():
         try:
             service = Level3Service(key_id, secret, method='POST')
+            paths = '\n'.join(['<path>%s</path>' % url for url in urls])
             service('invalidations/%s' % access_group, post_data="""
 <properties>
 <property>
@@ -61,21 +67,22 @@ def on_change(object, event, forced=False):
     </paths>
 </property>
 </properties>
-            """ % (property_name, '\n'.join(['<path>%s</path>' % url for url in urls]))
+            """ % (property_name, paths)
             )
             logging.info("Invalidating cache for urls %s" % ', '.join(urls))
-        except Exception, ex:
-            logging.warn('There was an error trying to invalidate level(3) cache.')
-                    
-    
-    timer = Timer(0.0, do_later) # do this in a thread so the page can return promptly
+        except Exception:
+            logging.warn(
+                'There was an error trying to invalidate level(3) cache.')
+
+    # do this in a thread so the page can return promptly
+    timer = Timer(0.0, do_later)
     timer.start()
-            
 
 
 from interfaces import ILevel3CachePurgeForcedEvent
 import zope.component.interfaces
 from zope.interface import implements
+
 
 class Level3CachePurgeForcedEvent(zope.component.interfaces.ObjectEvent):
     """An object has been modified"""
@@ -85,4 +92,3 @@ class Level3CachePurgeForcedEvent(zope.component.interfaces.ObjectEvent):
         super(Level3CachePurgeForcedEvent, self).__init__(context)
         self.context = context
         self.request = request
-        
