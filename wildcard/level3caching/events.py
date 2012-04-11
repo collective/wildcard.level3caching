@@ -54,6 +54,10 @@ def on_change(object, event, forced=False):
     key_id, secret = settings.key_id, settings.secret
     access_group, property_name = settings.access_group, settings.property_name
 
+    urls = set(urls)
+    if '' in urls:
+        urls.remove('')
+
     def do_later():
         try:
             service = Level3Service(key_id, secret, method='POST')
@@ -71,8 +75,10 @@ def on_change(object, event, forced=False):
             )
             logging.info("Invalidating cache for urls %s" % ', '.join(urls))
         except Exception:
+            import traceback
             logging.warn(
-                'There was an error trying to invalidate level(3) cache.')
+'There was an error trying to invalidate level(3) cache.\n%s' % (
+                traceback.format_exc()))
 
     # do this in a thread so the page can return promptly
     timer = Timer(0.0, do_later)
