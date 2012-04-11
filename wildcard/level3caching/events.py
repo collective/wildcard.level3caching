@@ -49,7 +49,7 @@ def on_change(object, event, forced=False):
         base = base + '/'
         urls.append(base)
         urls.extend(invalidated_urls(parent, base, views))
-    urls.extend(runCustomInvalidators(object, parent, site_path))
+    urls.extend(runCustomInvalidators(object, parent, site_path, event))
 
     key_id, secret = settings.key_id, settings.secret
     access_group, property_name = settings.access_group, settings.property_name
