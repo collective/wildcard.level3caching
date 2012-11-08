@@ -1,7 +1,10 @@
 from wildcard.level3caching.client import Level3Service
 from wildcard.level3caching.settings import Settings
 from wildcard.level3caching import runCustomInvalidators
-from zope.app.component.hooks import getSite
+try:
+    from zope.app.component.hooks import getSite
+except:
+    from zope.component.hooks import getSite
 from Acquisition import aq_parent, aq_inner
 from threading import Timer
 import logging
