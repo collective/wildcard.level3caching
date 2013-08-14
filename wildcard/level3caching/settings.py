@@ -3,9 +3,10 @@ from persistent.dict import PersistentDict
 from zope.annotation.interfaces import IAnnotations
 from wildcard.level3caching.interfaces import ILevel3CachingSettings
 
+
 class Settings(object):
     implements(ILevel3CachingSettings)
-    
+
     def __init__(self, context):
         self.context = context
         annotations = IAnnotations(self.context)
@@ -14,7 +15,7 @@ class Settings(object):
         if self._metadata is None:
             self._metadata = PersistentDict()
             annotations['wildcard.level3caching'] = self._metadata
-                    
+
     def __setattr__(self, name, value):
         if name[0] == '_' or name in ['context']:
             self.__dict__[name] = value

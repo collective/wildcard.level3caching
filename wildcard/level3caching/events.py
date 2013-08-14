@@ -25,9 +25,9 @@ def invalidated_urls(object, base, views):
 def on_change(object, event, forced=False):
     site = getSite()
     settings = Settings(site)
-    if not forced and (not settings.auto or not settings.key_id or \
-            not settings.secret or not settings.access_group or \
-                                            not settings.property_name):
+    if not forced and (not settings.auto or not settings.key_id or
+       not settings.secret or not settings.access_group or
+       not settings.property_name):
         return
 
     object = aq_inner(object)
@@ -65,7 +65,7 @@ def on_change(object, event, forced=False):
         try:
             service = Level3Service(key_id, secret, method='POST')
             paths = '\n'.join(['<path>%s</path>' % url for url in urls])
-            service('invalidations/%s' % access_group, post_data="""
+            service('invalidations', access_group, post_data="""
 <properties>
 <property>
     <name>%s</name>
@@ -79,9 +79,8 @@ def on_change(object, event, forced=False):
             logging.info("Invalidating cache for urls %s" % ', '.join(urls))
         except Exception:
             import traceback
-            logging.warn(
-'There was an error trying to invalidate level(3) cache.\n%s' % (
-                traceback.format_exc()))
+            logging.warn('There was an error trying to invalidate' +
+                         'level(3) cache.\n%s' % traceback.format_exc())
 
     # do this in a thread so the page can return promptly
     timer = Timer(0.0, do_later)

@@ -16,18 +16,21 @@ class Level3SettingsForm(ploneformbase.EditForm):
 
     @form.action(u"Save", condition=form.haveInputWidgets, name=u'save')
     def _handle_save_action(self, action, data):
-        if form.applyChanges(self.context, self.form_fields, data, self.adapters):
+        if form.applyChanges(self.context, self.form_fields, data,
+                             self.adapters):
             zope.event.notify(ploneformbase.EditSavedEvent(self.context))
             self.status = "Changes saved"
         else:
             zope.event.notify(ploneformbase.EditCancelledEvent(self.context))
             self.status = "No changes"
-        self.request.response.redirect(self.context.absolute_url() + '/@@level3-settings')
-        
-        
+        self.request.response.redirect(
+            self.context.absolute_url() + '/@@level3-settings')
+
+
 class Utils(BrowserView):
-    
+
     def invalidate(self):
         on_change(self.context, None, forced=True)
         notify(Level3CachePurgeForcedEvent(self.context, self.request))
-        return self.request.response.redirect(self.context.absolute_url() + '/view')
+        return self.request.response.redirect(
+            self.context.absolute_url() + '/view')
